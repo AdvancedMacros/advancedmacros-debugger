@@ -1,0 +1,113 @@
+{
+  "name": "advancedmacros-debugger",
+  "displayName": "Advanced Macros Debugger",
+  "description": "Debug tools for the Advanced Macros Minecraft mod",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.71.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onCommand:advancedmacros-debugger.helloWorld",
+    "onCommand:advancedmacros-debugger.connect",
+    "onCommand:advancedmacros-debugger.getProgramName"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "breakpoints": [
+      {
+        "language": "lua"
+      }
+    ],
+    "commands": [
+      {
+        "command": "advancedmacros-debugger.helloWorld",
+        "title": "Hello World"
+      },
+      {
+        "command": "advancedmacros-debugger.connect",
+        "title": "Advanced Macros: Start debug server"
+      },
+      {
+        "command": "advancedmacros-debugger.disconnect",
+        "title": "Advanced Macros: Stop debug server"
+      }
+    ],
+    "debuggers": [
+      {
+        "type": "am-lua",
+        "label": "Advanced Macros Debug",
+        
+        "runtime": "node",
+        "configurationAttributes": {
+          "launch": {
+            "required":["program"],
+            "properties": {
+              "program": {
+                "type": "string",
+                "description": "Absolute path to a text file.",
+                "default": "${workspaceFolder}/${command:AskForProgramName}"
+              },
+              "sandbox": {
+                "type": "boolean",
+                "description": "Run the script in a sandbox env.",
+                "default": true
+              }
+            }
+          }
+        },
+        "initialConfigurations": [
+          {
+            "type": "am-lua",
+            "request": "launch",
+            "name": "Ask for file name",
+            "program": "${workspaceFolder}/${command:AskForProgramName}",
+            "sandbox": true
+          }
+        ],
+        "configurationSnippets": [
+          {
+            "label": "Advanced Macros Debug: Launch",
+            "description": "A new configuration for launching a AM debug program",
+            "body": {
+              "type": "am-lua",
+              "request": "launch",
+              "name": "${2:Launch Program}",
+              "program": "^\"\\${workspaceFolder}/${1:Program}\""
+            }
+          }
+        ],
+        "variables": {
+          "AskForProgramName": "extension.advancedmacros-debugger.getProgramName"
+        }
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js"
+  },
+  "dependencies": {
+    "express@4": "^4.18.1",
+    "socket.io": "^4.5.2"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.71.0",
+    "@types/glob": "^7.2.0",
+    "@types/mocha": "^9.1.1",
+    "@types/node": "16.x",
+    "@typescript-eslint/eslint-plugin": "^5.31.0",
+    "@typescript-eslint/parser": "^5.31.0",
+    "eslint": "^8.20.0",
+    "glob": "^8.0.3",
+    "mocha": "^10.0.0",
+    "typescript": "^4.7.4",
+    "@vscode/test-electron": "^2.1.5"
+  }
+}
