@@ -7,7 +7,7 @@ const { Server } = require("socket.io");
 
 
 let app;
-let io;
+let io:any;
 let server:any;
 
 // this method is called when your extension is activated
@@ -46,7 +46,12 @@ export function activate(context: vscode.ExtensionContext) {
 
 		io.on('connection', (socket:any) => {
 			console.log('a user connected');
-		  });
+			io.emit("wolf",{bark:1});
+			io.emit("wolf","egg");
+		});
+		io.on('cow', (obj:any)=>{
+			console.log("COW: " + obj)
+		});
 
 		// server.listen(3000, ()=>{
 			console.log('listening on port *:3000');
@@ -59,6 +64,7 @@ export function activate(context: vscode.ExtensionContext) {
 		server.close();
 		console.log("Server closed");
 	});
+	context.subscriptions.push( disconnect );
 
 
 	let getProgramName = vscode.commands.registerCommand('extension.advancedmacros-debugger.getProgramName', config => {
