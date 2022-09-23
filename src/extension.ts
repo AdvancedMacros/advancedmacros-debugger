@@ -25,18 +25,12 @@ export function activate(context: vscode.ExtensionContext) {
 
 	let connectToGame = vscode.commands.registerCommand('advancedmacros-debugger.connect', ()=>{
 		vscode.window.showInformationMessage("Launching debug server...");
-		console.log("Creating 'app'");
 		app = express();
 		app.disable('etag');
 		app.use(express.json());
-		console.log("Creating server");
-		//server = http.createServer(app);
-		server = app.listen(3000);
+		server = app.listen(16142);
 		io = new Server( server );
 
-		// app.get('/', (req:IncomingMessage , res:ServerResponse)=>{
-		// 	res.send('<h1>Hello world<h1/>');
-		// });
 		app.get('/', (req:any, res:any) => {
 			res.send(`<h1>Hello world</h1><script src="/socket.io/socket.io.js"></script>
 			<script>
@@ -53,14 +47,12 @@ export function activate(context: vscode.ExtensionContext) {
 			console.log("COW: " + obj)
 		});
 
-		// server.listen(3000, ()=>{
-			console.log('listening on port *:3000');
-		// });
-		console.log("Not blocked");
+		console.log('listening on port *:16142');
 	});
 	context.subscriptions.push( connectToGame );
 
 	let disconnect = vscode.commands.registerCommand('advancedmacros-debugger.disconnect', ()=>{
+		io.emit("disconnect",{});
 		server.close();
 		console.log("Server closed");
 	});
