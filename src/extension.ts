@@ -5,10 +5,12 @@ import * as vscode from 'vscode';
 const express = require("express");
 const { Server } = require("socket.io");
 
+const version = "0.0.1";
 
 let app;
 let io:any;
 let server:any;
+let client:any;
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -40,11 +42,11 @@ export function activate(context: vscode.ExtensionContext) {
 
 		io.on('connection', (socket:any) => {
 			console.log('a user connected');
-			io.emit("wolf",{bark:1});
-			io.emit("wolf","egg");
+			io.emit("version",version);
 		});
-		io.on('cow', (obj:any)=>{
-			console.log("COW: " + obj)
+		io.on('useConnection', (obj:any)=>{
+			console.log("Using new connection");
+			client = obj.socket;
 		});
 
 		console.log('listening on port *:16142');
@@ -71,3 +73,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 // this method is called when your extension is deactivated
 export function deactivate() {}
+
+export function getClient() {
+	return client;
+}
