@@ -57,7 +57,7 @@ export class AdvancedMacrosDebugSession extends LoggingDebugSession {
     })
 
     this._runtime.on("error", ( info )=>{
-      this.sendEvent( new StoppedEvent( "error", threadID, info.message ) )
+      // this.sendEvent( new StoppedEvent( "error", threadID, info.message ) )
     });
   }
 

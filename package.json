@@ -39,7 +39,7 @@
       {
         "type": "am-lua",
         "label": "Advanced Macros Debug",
-        "program": "./out/debugAdapter.ts",
+        "program": "./out/AdvancedMacrosDebugSession.ts",
         "runtime": "node",
         "configurationAttributes": {
           "launch": {
