@@ -72,7 +72,7 @@ export class AdvancedMacrosDebugSession extends LoggingDebugSession {
 
     response.body = response.body || {};
 
-    // response.body.supportsConfigurationDoneRequest = maybe
+    response.body.supportsConfigurationDoneRequest = true;
     
 
 
@@ -85,6 +85,24 @@ export class AdvancedMacrosDebugSession extends LoggingDebugSession {
     
   }
   
+  protected override continueRequest(response: DebugProtocol.ContinueResponse, args: DebugProtocol.ContinueArguments, request?: DebugProtocol.Request | undefined): void {
+    let threadID = args.threadId;
+    if( args.singleThread )
+      this._runtime.emit( "resume", threadID );
+    else
+      this._runtime.emit( "resumeAll" );
+
+    response.body.allThreadsContinued = !args.singleThread;
+  }
+
+  protected override launchRequest(response: DebugProtocol.LaunchResponse, args: DebugProtocol.LaunchRequestArguments, request?: DebugProtocol.Request | undefined): void {
+    let regular = args.noDebug;
+    //todo get file
+    let file = "argLog.lua";
+    
+    //response.body. ...?
+  }
+
   protected override stepInRequest(response: DebugProtocol.StepInResponse, args: DebugProtocol.StepInArguments, request?: DebugProtocol.Request | undefined): void {
     
   }
